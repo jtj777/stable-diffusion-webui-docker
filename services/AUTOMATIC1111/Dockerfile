@@ -80,12 +80,13 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 COPY . /docker
 
-RUN \
-  python3 /docker/info.py ${ROOT}/modules/ui.py && \
-  mv ${ROOT}/style.css ${ROOT}/user.css && \
-  # one of the ugliest hacks I ever wrote \
-  sed -i 's/in_app_dir = .*/in_app_dir = True/g' /usr/local/lib/python3.10/site-packages/gradio/routes.py && \
-  git config --global --add safe.directory '*'
+# HACK 這個程式會修改內容，但不必要，而且會影響git pull。所以先拿掉
+# RUN \
+#   python3 /docker/info.py ${ROOT}/modules/ui.py && \
+#   mv ${ROOT}/style.css ${ROOT}/user.css && \
+#   # one of the ugliest hacks I ever wrote \
+#   sed -i 's/in_app_dir = .*/in_app_dir = True/g' /usr/local/lib/python3.10/site-packages/gradio/routes.py && \
+#   git config --global --add safe.directory '*'
 
 WORKDIR ${ROOT}
 ENV NVIDIA_VISIBLE_DEVICES=all
